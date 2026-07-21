@@ -250,14 +250,14 @@ export default function App() {
               <button className={isMonthly ? "active" : ""} onClick={() => setView("monthly")} aria-pressed={isMonthly}>Monthly radar <span>New</span></button>
             </div>
             <p className="kicker">{isMonthly ? `${monthLabel(month)} · Store apps + platform patches` : <>Zurich <span>→</span> Australia · 2026 edition</>}</p>
-            <h1>{isMonthly ? "See what changed across your ServiceNow products this month." : "Build your Australia upgrade briefing in five minutes."}</h1>
-            <p className="hero__lede">{isMonthly ? "Turn fragmented application version histories and patch notes into one focused, role-aware release radar." : "Skip the release-note maze. Get a focused view of the risks, decisions, and opportunities that matter to your role and product footprint."}</p>
+            <h1>{isMonthly ? "Review monthly changes across your ServiceNow products." : "Build your Australia upgrade briefing in five minutes."}</h1>
+            <p className="hero__lede">{isMonthly ? "Complement application version histories and patch notes with a consolidated, role-aware view for technical review and planning." : "Complement the official release notes with a role- and product-aware view of risks, review decisions, opportunities, and recommended next actions."}</p>
             <div className="trust-row" aria-label="Project principles">
               <span>{isMonthly ? `${monthlyEntries.filter((entry) => entry.month === month).length} monthly signals` : "30 curated signals"}</span><span>Official sources</span><span>No sign-in</span>
             </div>
             <p className="independence-note">An independent community project. Unofficial and not sponsored, approved, or endorsed by ServiceNow, Inc.</p>
           </div>
-          <aside className="hero__note"><p className="eyebrow">The promise</p><p>{isMonthly ? "ServiceNow publishes by application. The radar brings the month together and tells your team what deserves attention." : "ServiceNow Docs tells you what changed. This briefing helps your team decide what to inspect, test, adopt, or retire."}</p></aside>
+          <aside className="hero__note"><p className="eyebrow">Planning layer</p><p>{isMonthly ? "Official release notes document changes by application. The radar organizes selected signals by month, role, and product to support technical triage and planning." : "Official release notes document what changed. This briefing structures selected changes by risk, review need, and adoption opportunity to support upgrade planning."}</p></aside>
         </section>
 
         <div className="workspace">
