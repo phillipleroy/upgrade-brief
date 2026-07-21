@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import rawMonthlyEntries from "./data/monthlyReleaseEntries.json";
 import rawUpgradeEntries from "./data/releaseEntries.json";
+import { ImpactRadar } from "./ImpactRadar";
 import {
   products,
   roles,
@@ -84,7 +85,7 @@ function SourceDetails({ actions, title, url, verifiedAt }: { actions: string[];
 
 function UpgradeCard({ entry }: { entry: ReleaseEntry }) {
   return (
-    <article className={`entry-card entry-card--${entry.classification}`} data-testid={`entry-${entry.id}`}>
+    <article id={`entry-${entry.id}`} className={`entry-card entry-card--${entry.classification}`} data-testid={`entry-${entry.id}`}>
       <div className="entry-card__topline">
         <span className={`priority priority--${entry.priority}`}>{entry.priority}</span>
         <span className="classification">{entry.classification}</span>
@@ -101,7 +102,7 @@ function UpgradeCard({ entry }: { entry: ReleaseEntry }) {
 function MonthlyCard({ entry }: { entry: MonthlyReleaseEntry }) {
   const kindLabel = entry.releaseKind === "platform-patch" ? "Platform patch" : "Store app";
   return (
-    <article className={`entry-card entry-card--monthly-${entry.changeType}`} data-testid={`entry-${entry.id}`}>
+    <article id={`entry-${entry.id}`} className={`entry-card entry-card--monthly-${entry.changeType}`} data-testid={`entry-${entry.id}`}>
       <div className="entry-card__topline">
         <span className={`priority priority--${entry.priority}`}>{entry.priority}</span>
         <span className="classification">{entry.changeType}</span>
@@ -315,6 +316,8 @@ export default function App() {
               <div><p className="eyebrow">{isMonthly ? `${monthLabel(month)} radar` : isPersonalized ? "Your briefing" : "Sample briefing"}</p><h2>{isMonthly ? `${filteredMonthlyEntries.length} monthly ${filteredMonthlyEntries.length === 1 ? "signal" : "signals"} for your context` : isPersonalized ? `${filteredUpgradeEntries.length} signals for your upgrade` : "Start with the signals most teams should see"}</h2><p>{isMonthly ? "Monthly priorities are editorial guidance. Store apps may have separate family, subscription, and dependency requirements." : isPersonalized ? "Priorities are editorial guidance, not official ServiceNow severity ratings." : "Choose a role or product to replace this preview with a focused briefing."}</p></div>
               {isMonthly ? <div className="release-stamp release-stamp--month"><span>RADAR</span><strong>{monthLabel(month).split(" ")[0]}</strong><i>{month.slice(0, 4)}</i><span>SOURCES</span><strong>Store + patch</strong></div> : <div className="release-stamp"><span>FROM</span><strong>Zurich</strong><i>→</i><span>TO</span><strong>Australia</strong></div>}
             </div>
+
+            {currentEntries.length > 0 && <ImpactRadar entries={currentEntries} />}
 
             {currentEntries.length ? isMonthly ? (
               <>

@@ -7,6 +7,8 @@ An unofficial, source-backed briefing tool with two views:
 
 Visitors can share filtered URLs, print or save a briefing as PDF, and open the exact official source behind every finding. The first monthly archive covers July 2026.
 
+An interactive Impact Radar summarizes the filtered briefing by product, editorial priority, and signal type. Each marker links to its detailed card, and the same information remains available to assistive technology.
+
 The interface follows the operating-system color preference by default. An accessible header control cycles between System, Light, and Dark modes and remembers explicit choices in local browser storage.
 
 Upgrade Brief is an independent community project. It is not an official ServiceNow product and is not sponsored, approved, or endorsed by ServiceNow, Inc. Views, editorial priorities, and recommendations are the author's own and are explicitly separated from official ServiceNow facts.

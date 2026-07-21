@@ -4,6 +4,7 @@ import test from "node:test";
 
 const html = fs.readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
 const monthlyEntries = JSON.parse(fs.readFileSync(new URL("../src/data/monthlyReleaseEntries.json", import.meta.url), "utf8"));
+const radarSource = fs.readFileSync(new URL("../src/ImpactRadar.tsx", import.meta.url), "utf8");
 
 test("production output contains product metadata", () => {
   assert.match(html, /Upgrade Brief — Release Intelligence/);
@@ -16,6 +17,13 @@ test("production output contains product metadata", () => {
 
 test("production assets use a repository-safe relative base", () => {
   assert.match(html, /(?:src|href)="\.\/assets\//);
+});
+
+test("impact radar provides interactive and accessible source-backed markers", () => {
+  assert.match(radarSource, /Impact radar/);
+  assert.match(radarSource, /role="img"/);
+  assert.match(radarSource, /href={`#entry-\${entry\.id}`}/);
+  assert.match(radarSource, /Priorities shown here are editorial guidance/);
 });
 
 test("monthly archive contains a balanced, source-backed July launch edition", () => {
