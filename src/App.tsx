@@ -287,8 +287,14 @@ export default function App() {
       </main>
 
       <footer>
-        <p><strong>Upgrade Brief</strong> · An unofficial community project.</p>
-        <p>Not affiliated with or endorsed by ServiceNow. ServiceNow is a trademark of ServiceNow, Inc.</p>
+        <div className="footer__line">
+          <p><strong>Upgrade Brief</strong> · An unofficial community project.</p>
+          <p>Not affiliated with or endorsed by ServiceNow. ServiceNow is a trademark of ServiceNow, Inc.</p>
+        </div>
+        <div className="ai-note">
+          <span>AI transparency</span>
+          <p>This project was created with AI assistance. Release information was summarized and structured from the linked official ServiceNow sources, then reviewed for accuracy as of 21 July 2026. AI-generated content can contain errors or become outdated. Confirm all findings in current ServiceNow documentation and validate recommendations in your own non-production instance before making upgrade decisions. Priorities and actions shown here are editorial guidance, not official ServiceNow severity ratings.</p>
+        </div>
       </footer>
     </>
   );
