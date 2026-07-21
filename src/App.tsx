@@ -287,8 +287,8 @@ export default function App() {
               <button className={isMonthly ? "active" : ""} onClick={() => setView("monthly")} aria-pressed={isMonthly}>Monthly radar <span>New</span></button>
             </div>
             <p className="kicker">{isMonthly ? `${monthLabel(month)} · Store apps + platform patches` : <>Zurich <span>→</span> Australia · 2026 edition</>}</p>
-            <h1>{isMonthly ? "Review monthly changes across your ServiceNow products." : "Build your Australia upgrade briefing in five minutes."}</h1>
-            <p className="hero__lede">{isMonthly ? "Complement application version histories and patch notes with a consolidated, role-aware view for technical review and planning." : "Complement the official release notes with a role- and product-aware view of risks, review decisions, opportunities, and recommended next actions."}</p>
+            <h1>{isMonthly ? "Review monthly application and platform changes." : "Build your Australia upgrade briefing in five minutes."}</h1>
+            <p className="hero__lede">{isMonthly ? "Complement official ServiceNow release notes, application version histories, and patch notes with a consolidated, role-aware view for technical review and planning." : "Complement the official release notes with a role- and product-aware view of risks, review decisions, opportunities, and recommended next actions."}</p>
             <div className="trust-row" aria-label="Project principles">
               <span>{isMonthly ? `${monthlyEntries.filter((entry) => entry.month === month).length} monthly signals` : "30 curated signals"}</span><span>Official sources</span><span>No sign-in</span>
             </div>
