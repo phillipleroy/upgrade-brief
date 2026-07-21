@@ -1,5 +1,5 @@
 name: Propose a release signal
-description: Suggest an Australia change that deserves a briefing entry.
+description: Suggest a family-upgrade or monthly change that deserves a briefing entry.
 title: "Signal: "
 labels: ["proposed-entry"]
 body:
@@ -9,6 +9,18 @@ body:
       label: Proposed title
     validations:
       required: true
+  - type: dropdown
+    id: stream
+    attributes:
+      label: Briefing stream
+      options: ["Family upgrade", "Monthly release radar"]
+    validations:
+      required: true
+  - type: input
+    id: month
+    attributes:
+      label: Release month (monthly radar only)
+      placeholder: YYYY-MM
   - type: dropdown
     id: product
     attributes:
