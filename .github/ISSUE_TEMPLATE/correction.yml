@@ -1,0 +1,28 @@
+name: Report a correction
+description: Flag a factual error, stale source, or misleading interpretation.
+title: "Correction: "
+labels: ["correction"]
+body:
+  - type: input
+    id: entry
+    attributes:
+      label: Entry title or ID
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What needs correcting?
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official ServiceNow source
+      placeholder: https://www.servicenow.com/docs/...
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested correction

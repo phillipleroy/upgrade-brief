@@ -1,0 +1,31 @@
+name: Propose a release signal
+description: Suggest an Australia change that deserves a briefing entry.
+title: "Signal: "
+labels: ["proposed-entry"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Proposed title
+    validations:
+      required: true
+  - type: dropdown
+    id: product
+    attributes:
+      label: Primary product area
+      options: ["Platform", "Creator & Development", "ITSM", "CMDB & ITOM", "Next Experience", "SPM"]
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Official ServiceNow source
+      placeholder: https://www.servicenow.com/docs/...
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Why does this require a decision or action?
+    validations:
+      required: true
