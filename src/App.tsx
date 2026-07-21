@@ -239,7 +239,7 @@ export default function App() {
       <a className="skip-link" href="#briefing-results">Skip to briefing</a>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Upgrade Brief home"><span className="brand-mark" aria-hidden="true">UB</span><span>Upgrade Brief</span></a>
-        <nav aria-label="Primary navigation"><a href="#methodology">Methodology</a><a href="https://github.com/phillipleroy/servicenow-upgrade-briefing" target="_blank" rel="noreferrer">GitHub</a></nav>
+        <nav aria-label="Primary navigation"><a href="#methodology">Methodology</a><a href="https://github.com/phillipleroy/upgrade-brief" target="_blank" rel="noreferrer">GitHub</a></nav>
       </header>
 
       <main id="top">
@@ -255,6 +255,7 @@ export default function App() {
             <div className="trust-row" aria-label="Project principles">
               <span>{isMonthly ? `${monthlyEntries.filter((entry) => entry.month === month).length} monthly signals` : "30 curated signals"}</span><span>Official sources</span><span>No sign-in</span>
             </div>
+            <p className="independence-note">A personal project by a ServiceNow® employee. Independent, unofficial, and not sponsored, approved, or endorsed by ServiceNow, Inc.</p>
           </div>
           <aside className="hero__note"><p className="eyebrow">The promise</p><p>{isMonthly ? "ServiceNow publishes by application. The radar brings the month together and tells your team what deserves attention." : "ServiceNow Docs tells you what changed. This briefing helps your team decide what to inspect, test, adopt, or retire."}</p></aside>
         </section>
@@ -303,7 +304,7 @@ export default function App() {
         </section>
       </main>
 
-      <footer><div className="footer__line"><p><strong>Upgrade Brief</strong> · An unofficial community project.</p><p>Not affiliated with or endorsed by ServiceNow. ServiceNow is a trademark of ServiceNow, Inc.</p></div><div className="ai-note"><span>AI transparency</span><p>This project was created with AI assistance. Release information was summarized and structured from the linked official ServiceNow sources, then reviewed for accuracy as of 21 July 2026. AI-generated content can contain errors or become outdated. Confirm all findings in current ServiceNow documentation and validate recommendations in your own non-production instance before making upgrade decisions. Priorities and actions shown here are editorial guidance, not official ServiceNow severity ratings.</p></div></footer>
+      <footer><div className="footer__line"><p><strong>Upgrade Brief</strong> · A personal project created independently by a ServiceNow employee.</p><p>Not an official ServiceNow product and not sponsored, approved, or endorsed by ServiceNow, Inc. Views, priorities, and recommendations are the author’s own.</p></div><div className="ai-note"><span>AI transparency</span><p>This project was created with AI assistance. Release information was summarized and structured from the linked official ServiceNow sources, then reviewed for accuracy as of 21 July 2026. AI-generated content can contain errors or become outdated. Confirm all findings in current ServiceNow documentation and validate recommendations in your own non-production instance before making upgrade decisions. Priorities and actions shown here are editorial guidance, not official ServiceNow severity ratings.</p></div><div className="trademark-note"><span>Trademarks</span><p>ServiceNow, the ServiceNow logo, Now, and other ServiceNow marks are trademarks and/or registered trademarks of ServiceNow, Inc., in the United States and/or other countries. Other company and product names may be trademarks of the respective companies with which they are associated.</p></div></footer>
     </>
   );
 }

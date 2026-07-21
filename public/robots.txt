@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://phillipleroy.github.io/servicenow-upgrade-briefing/sitemap.xml
+Sitemap: https://phillipleroy.github.io/upgrade-brief/sitemap.xml

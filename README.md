@@ -1,4 +1,4 @@
-# ServiceNow Upgrade Briefing and Monthly Release Radar
+# Upgrade Brief
 
 An unofficial, source-backed briefing tool with two views:
 
@@ -7,7 +7,7 @@ An unofficial, source-backed briefing tool with two views:
 
 Visitors can share filtered URLs, print or save a briefing as PDF, and open the exact official source behind every finding. The first monthly archive covers July 2026.
 
-The project is not affiliated with or endorsed by ServiceNow. Editorial priorities and recommendations are explicitly separated from official ServiceNow facts.
+Upgrade Brief is a personal project created independently by a ServiceNow employee. It is not an official ServiceNow product and is not sponsored, approved, or endorsed by ServiceNow, Inc. Views, editorial priorities, and recommendations are the author's own and are explicitly separated from official ServiceNow facts.
 
 ## Source strategy
 
@@ -79,7 +79,7 @@ The app derives its month selector from the dataset, so adding entries with a ne
 
 The workflow in `.github/workflows/deploy.yml` tests, builds, and deploys the `dist` directory when `main` changes. In the repository settings, select **GitHub Actions** as the Pages source.
 
-Vite emits relative asset paths, so the same production build works at `https://phillipleroy.github.io/servicenow-upgrade-briefing/` and in local previews.
+Vite emits relative asset paths, so the same production build works at `https://phillipleroy.github.io/upgrade-brief/` and in local previews.
 
 ## Contribute
 
@@ -87,4 +87,6 @@ Use the GitHub issue templates to report a correction or propose either kind of 
 
 ## License and trademarks
 
-Code and original editorial content may be reused under the repository license once one is added. ServiceNow is a trademark of ServiceNow, Inc. This independent community project does not use the ServiceNow logo or claim endorsement.
+Code and original editorial content may be reused under the repository license once one is added. The project does not use ServiceNow logos or claim endorsement.
+
+ServiceNow, the ServiceNow logo, Now, and other ServiceNow marks are trademarks and/or registered trademarks of ServiceNow, Inc., in the United States and/or other countries. Other company and product names may be trademarks of the respective companies with which they are associated.

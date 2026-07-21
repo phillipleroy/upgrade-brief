@@ -6,7 +6,8 @@ const html = fs.readFileSync(new URL("../dist/index.html", import.meta.url), "ut
 const monthlyEntries = JSON.parse(fs.readFileSync(new URL("../src/data/monthlyReleaseEntries.json", import.meta.url), "utf8"));
 
 test("production output contains product metadata", () => {
-  assert.match(html, /ServiceNow Upgrade Brief & Monthly Release Radar/);
+  assert.match(html, /Upgrade Brief — Release Intelligence/);
+  assert.doesNotMatch(html, /ServiceNow Upgrade Brief & Monthly Release Radar/);
   assert.match(html, /og\.png/);
   assert.match(html, /og:image:width/);
   assert.match(html, /og:url/);
