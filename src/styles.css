@@ -140,8 +140,16 @@ select { width: 100%; border: 1px solid var(--line); border-radius: 7px; padding
 .release-stamp span { color: var(--ink-soft); }
 .release-stamp strong { font-size: 15px; }
 .release-stamp i { grid-column: 1 / -1; font-style: normal; text-align: center; color: var(--orange); line-height: 1; }
-.release-stamp--month { box-shadow: 5px 5px 0 #76c7b8; }
-.release-stamp--month i { grid-column: 2; grid-row: 1; text-align: right; font: 700 11px/1 "SFMono-Regular", Consolas, monospace; }
+.release-stamp--month { display: flex; min-width: 460px; padding: 0; border-radius: 14px; position: relative; transform: rotate(-.45deg); box-shadow: 8px 8px 0 #76c7b8; animation: monthly-ticket-swap .32s ease-out; }
+.monthly-ticket__body { flex: 1; min-width: 0; padding: 17px 20px 13px 24px; border-top: 5px solid var(--teal); border-radius: 13px 0 0 13px; }
+.monthly-ticket__route { display: grid; grid-template-columns: minmax(112px, .9fr) 30px minmax(132px, 1.15fr); gap: 10px; align-items: center; }
+.release-stamp--month .boarding-place strong { font-size: 20px; }
+.monthly-ticket__route > i { grid-column: auto; color: var(--orange); font-size: 25px; font-weight: 700; font-style: normal; line-height: 1; text-align: center; }
+.monthly-ticket__source { display: flex; align-items: baseline; gap: 8px; margin-top: 11px; padding-top: 9px; border-top: 1px solid var(--line); white-space: nowrap; }
+.monthly-ticket__source span { font: 700 8px/1 "SFMono-Regular", Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
+.monthly-ticket__source strong { overflow: hidden; text-overflow: ellipsis; font-size: 10px; letter-spacing: .01em; }
+.monthly-ticket__stub { width: 98px; border-top: 5px solid var(--teal); border-radius: 0 13px 13px 0; }
+.monthly-ticket__stub strong { font-size: 25px; }
 .release-stamp--boarding { display: flex; min-width: 430px; padding: 0; border-radius: 14px; position: relative; transform: rotate(.6deg); box-shadow: 8px 8px 0 var(--yellow); animation: ticket-swap .32s ease-out; }
 .boarding-route { display: grid; grid-template-columns: minmax(118px, 1fr) 32px minmax(100px, 1fr); gap: 10px; align-items: center; flex: 1; padding: 20px 20px 18px 24px; }
 .boarding-place { display: grid; gap: 2px; min-width: 0; }
@@ -156,6 +164,7 @@ select { width: 100%; border: 1px solid var(--line); border-radius: 7px; padding
 .boarding-stub strong { font-size: 25px; line-height: 1; letter-spacing: .04em; }
 .boarding-barcode { display: block; width: 100%; height: 17px; margin-top: 5px; background: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 3px, var(--ink) 3px 5px, transparent 5px 7px); opacity: .8; }
 @keyframes ticket-swap { from { opacity: .45; transform: translateY(-5px) rotate(.6deg) scale(.98); } to { opacity: 1; transform: translateY(0) rotate(.6deg) scale(1); } }
+@keyframes monthly-ticket-swap { from { opacity: .45; transform: translateY(-5px) rotate(-.45deg) scale(.98); } to { opacity: 1; transform: translateY(0) rotate(-.45deg) scale(1); } }
 .impact-radar { display: grid; grid-template-columns: minmax(300px, .95fr) minmax(280px, .8fr); gap: clamp(28px, 5vw, 68px); align-items: center; padding: 42px 0; border-bottom: 1px solid var(--line); }
 .impact-radar__visual { min-width: 0; }
 .impact-radar__chart { display: block; width: 100%; max-width: 470px; margin: 0 auto; overflow: visible; }
@@ -285,6 +294,12 @@ footer p { margin: 0; }
   .results { padding: 30px 18px 60px; }
   .results__header { display: block; }
   .release-stamp { margin-top: 26px; width: 180px; }
+  .release-stamp--month { width: min(100%, 410px); min-width: 0; }
+  .monthly-ticket__body { padding-left: 16px; }
+  .monthly-ticket__route { grid-template-columns: minmax(80px, .9fr) 20px minmax(92px, 1.1fr); }
+  .release-stamp--month .boarding-place strong { font-size: 17px; }
+  .monthly-ticket__stub { width: 76px; padding-inline: 10px; }
+  .monthly-ticket__stub strong { font-size: 21px; }
   .release-stamp--boarding { width: min(100%, 410px); min-width: 0; }
   .boarding-route { grid-template-columns: minmax(76px, 1fr) 20px minmax(68px, 1fr); padding-left: 16px; }
   .boarding-place strong { font-size: 18px; }

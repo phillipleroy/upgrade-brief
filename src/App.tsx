@@ -282,6 +282,15 @@ export default function App() {
   const focusOptions = isMonthly ? (["all", "actions", "new", "fixes"] as MonthlyFocus[]) : (["all", "risks", "opportunities"] as Focus[]);
   const nextTheme = themeModes[(themeModes.indexOf(themeMode) + 1) % themeModes.length];
   const themeIcon = themeMode === "system" ? "◐" : themeMode === "light" ? "☀" : "☾";
+  const [monthlyName, monthlyYear] = monthLabel(month).split(" ");
+  const monthlyScope = selectedProducts.length === 0
+    ? "All products"
+    : selectedProducts.length === 1
+      ? selectedProducts[0]
+      : `${selectedProducts.length} products`;
+  const monthlyAudience = selectedRole ? roleLabels[selectedRole] : "All roles";
+  const monthlyStatus = month === availableMonths[0] ? "Latest" : "Archive";
+  const monthlyTicketKey = [month, selectedRole || "all", selectedProducts.join("-"), monthlyFocus].join("-");
 
   return (
     <>
@@ -332,7 +341,23 @@ export default function App() {
           <section id="briefing-results" className="results" aria-live="polite">
             <div className="results__header">
               <div><p className="eyebrow">{isMonthly ? `${monthLabel(month)} radar` : isPersonalized ? "Your EA briefing" : "Sample EA briefing"}</p><h2>{isMonthly ? `${filteredMonthlyEntries.length} monthly ${filteredMonthlyEntries.length === 1 ? "signal" : "signals"} for your context` : isPersonalized ? `${filteredUpgradeEntries.length} signals for your upgrade` : "Start with the signals most teams should see"}</h2><p>{isMonthly ? "Monthly priorities are editorial guidance. Store apps may have separate family, subscription, and dependency requirements." : isPersonalized ? "Brazil is in Early Availability. Priorities are editorial guidance, not official ServiceNow severity ratings." : "Choose a role or product to replace this preview with a focused briefing. Brazil content may change before General Availability."}</p></div>
-              {isMonthly ? <div className="release-stamp release-stamp--month"><span>RADAR</span><strong>{monthLabel(month).split(" ")[0]}</strong><i>{month.slice(0, 4)}</i><span>SOURCES</span><strong>Store + patch</strong></div> : (
+              {isMonthly ? (
+                <div
+                  key={monthlyTicketKey}
+                  className="release-stamp release-stamp--month"
+                  aria-label={`Monthly radar: ${monthLabel(month)}, ${monthlyScope}, ${monthlyAudience}, ${filteredMonthlyEntries.length} signals, sources Store applications and platform patches`}
+                >
+                  <div className="monthly-ticket__body">
+                    <div className="monthly-ticket__route">
+                      <div className="boarding-place"><span>Period</span><strong>{monthlyName}</strong><small>{monthlyYear} · Monthly</small></div>
+                      <i aria-hidden="true">→</i>
+                      <div className="boarding-place"><span>Scope</span><strong>{monthlyScope}</strong><small>{monthlyAudience}</small></div>
+                    </div>
+                    <div className="monthly-ticket__source"><span>Sources</span><strong>Store apps + platform patches</strong></div>
+                  </div>
+                  <div className="boarding-stub monthly-ticket__stub" aria-hidden="true"><span>{monthlyStatus}</span><strong>{filteredMonthlyEntries.length}</strong><small>Signals</small><b className="boarding-barcode" /></div>
+                </div>
+              ) : (
                 <div key={sourceFamily} className="release-stamp release-stamp--boarding" aria-label={`Upgrade route: ${sourceFamily} to Brazil, Early Availability, ${applicableUpgradeEntries.length} curated signals`}>
                   <div className="boarding-route">
                     <div className="boarding-place"><span>From</span><strong>{sourceFamily}</strong><small>{sourceFamily === "Zurich" ? "ZUR" : "AUS"}</small></div>
