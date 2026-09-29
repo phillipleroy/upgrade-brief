@@ -333,13 +333,13 @@ export default function App() {
             <div className="results__header">
               <div><p className="eyebrow">{isMonthly ? `${monthLabel(month)} radar` : isPersonalized ? "Your EA briefing" : "Sample EA briefing"}</p><h2>{isMonthly ? `${filteredMonthlyEntries.length} monthly ${filteredMonthlyEntries.length === 1 ? "signal" : "signals"} for your context` : isPersonalized ? `${filteredUpgradeEntries.length} signals for your upgrade` : "Start with the signals most teams should see"}</h2><p>{isMonthly ? "Monthly priorities are editorial guidance. Store apps may have separate family, subscription, and dependency requirements." : isPersonalized ? "Brazil is in Early Availability. Priorities are editorial guidance, not official ServiceNow severity ratings." : "Choose a role or product to replace this preview with a focused briefing. Brazil content may change before General Availability."}</p></div>
               {isMonthly ? <div className="release-stamp release-stamp--month"><span>RADAR</span><strong>{monthLabel(month).split(" ")[0]}</strong><i>{month.slice(0, 4)}</i><span>SOURCES</span><strong>Store + patch</strong></div> : (
-                <div className="release-stamp release-stamp--boarding" aria-label={`Upgrade route: ${sourceFamily} to Brazil, Early Availability`}>
+                <div key={sourceFamily} className="release-stamp release-stamp--boarding" aria-label={`Upgrade route: ${sourceFamily} to Brazil, Early Availability, ${applicableUpgradeEntries.length} curated signals`}>
                   <div className="boarding-route">
                     <div className="boarding-place"><span>From</span><strong>{sourceFamily}</strong><small>{sourceFamily === "Zurich" ? "ZUR" : "AUS"}</small></div>
                     <i aria-hidden="true">→</i>
                     <div className="boarding-place"><span>To · EA</span><strong>Brazil</strong><small>BRA</small></div>
                   </div>
-                  <div className="boarding-stub" aria-hidden="true"><span>Upgrade</span><strong>BRA</strong><small>EA · 2026</small><b className="boarding-barcode" /></div>
+                  <div className="boarding-stub" aria-hidden="true"><span>{sourceFamily === "Zurich" ? "Via AUS" : "Direct"}</span><strong>{applicableUpgradeEntries.length}</strong><small>Signals · EA</small><b className="boarding-barcode" /></div>
                 </div>
               )}
             </div>
