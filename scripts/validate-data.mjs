@@ -31,7 +31,7 @@ for (const [index, entry] of entries.entries()) {
   if (ids.has(entry.id)) errors.push(`${at}: duplicate id.`);
   ids.add(entry.id);
   if (!/^[a-z0-9-]+$/.test(entry.id ?? "")) errors.push(`${at}: id must be lowercase kebab-case.`);
-  if (entry.releaseFrom !== "Zurich" || entry.releaseTo !== "Australia") errors.push(`${at}: unsupported release path.`);
+  if (entry.releaseFrom !== "Australia" || entry.releaseTo !== "Brazil") errors.push(`${at}: unsupported release path.`);
   if (!Array.isArray(entry.products) || !entry.products.length || entry.products.some((value) => !allowed.products.has(value))) errors.push(`${at}: invalid products.`);
   if (!Array.isArray(entry.roles) || !entry.roles.length || entry.roles.some((value) => !allowed.roles.has(value))) errors.push(`${at}: invalid roles.`);
   if (!allowed.classifications.has(entry.classification)) errors.push(`${at}: invalid classification.`);

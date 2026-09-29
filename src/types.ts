@@ -18,8 +18,8 @@ export type ReleaseKind = (typeof releaseKinds)[number];
 export interface ReleaseEntry {
   id: string;
   title: string;
-  releaseFrom: "Zurich";
-  releaseTo: "Australia";
+  releaseFrom: "Australia";
+  releaseTo: "Brazil";
   products: Product[];
   roles: Role[];
   classification: Classification;
