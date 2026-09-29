@@ -2,12 +2,12 @@
 
 An unofficial, source-backed briefing tool with two views:
 
-- **Family Upgrade Brief:** helps teams moving from Australia to Brazil find prioritized risks, changes, opportunities, and next actions.
+- **Family Upgrade Brief:** helps teams moving from Australia or Zurich to Brazil find prioritized risks, changes, opportunities, and next actions.
 - **Monthly Release Radar:** consolidates monthly ServiceNow Store application updates and platform patches into a role- and product-aware review.
 
 Visitors can share filtered URLs, print or save a briefing as PDF, and open the exact official source behind every finding. The first monthly archive covers July 2026.
 
-The Brazil briefing is an **Early Availability preview**. Content may change before General Availability, so the interface labels the release status and asks readers to recheck current official documentation before production decisions. The current family dataset was verified on 29 September 2026 against the Brazil branch of ServiceNowDocs at commit `754d2a8d66adca6e93d01e9c7b8f12d56f833283`.
+The Brazil briefing is an **Early Availability preview**. Content may change before General Availability, so the interface labels the release status and asks readers to recheck current official documentation before production decisions. Users can select Australia or Zurich as their current family. The Zurich view combines the sequential Zurich-to-Australia and Australia-to-Brazil documentation deltas; it does not pretend that a direct Zurich-to-Brazil source exists. The current Brazil dataset was verified on 29 September 2026 against the Brazil branch of ServiceNowDocs at commit `754d2a8d66adca6e93d01e9c7b8f12d56f833283`.
 
 An interactive Impact Radar summarizes the filtered briefing by product, editorial priority, and signal type. Each marker links to its detailed card, and the same information remains available to assistive technology.
 
@@ -48,10 +48,10 @@ npm test
 
 ## Edit the datasets
 
-Family-upgrade signals live in `src/data/releaseEntries.json`. Every entry requires:
+Family-upgrade signals live in `src/data/releaseEntriesAustralia.json` and `src/data/releaseEntriesBrazil.json`. Every entry requires:
 
 - A stable kebab-case ID
-- The Australia-to-Brazil release path
+- The release path represented by its dataset: Zurich-to-Australia or Australia-to-Brazil
 - Supported product and role values
 - Classification and editorial priority
 - A concise official fact and separately labeled interpretation

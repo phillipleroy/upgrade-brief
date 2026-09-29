@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import rawMonthlyEntries from "./data/monthlyReleaseEntries.json";
-import rawUpgradeEntries from "./data/releaseEntries.json";
+import rawAustraliaEntries from "./data/releaseEntriesAustralia.json";
+import rawBrazilEntries from "./data/releaseEntriesBrazil.json";
 import { ImpactRadar } from "./ImpactRadar";
 import {
   products,
@@ -11,10 +12,12 @@ import {
   type Product,
   type ReleaseEntry,
   type Role,
+  type SourceFamily,
   type ViewMode,
 } from "./types";
 
-const upgradeEntries = rawUpgradeEntries as ReleaseEntry[];
+const australiaEntries = rawAustraliaEntries as ReleaseEntry[];
+const brazilEntries = rawBrazilEntries as ReleaseEntry[];
 const monthlyEntries = rawMonthlyEntries as MonthlyReleaseEntry[];
 
 const roleLabels: Record<Role, string> = {
@@ -52,6 +55,7 @@ function readInitialState(): {
   upgradeFocus: Focus;
   monthlyFocus: MonthlyFocus;
   month: string;
+  sourceFamily: SourceFamily;
 } {
   const params = new URLSearchParams(window.location.search);
   const view: ViewMode = params.get("view") === "monthly" ? "monthly" : "upgrade";
@@ -65,7 +69,8 @@ function readInitialState(): {
   const monthlyFocus: MonthlyFocus = ["actions", "new", "fixes"].includes(focusValue ?? "") ? focusValue as MonthlyFocus : "all";
   const requestedMonth = params.get("month") ?? "";
   const month = availableMonths.includes(requestedMonth) ? requestedMonth : availableMonths[0];
-  return { view, selectedRole, selectedProducts, upgradeFocus, monthlyFocus, month };
+  const sourceFamily: SourceFamily = params.get("from") === "Zurich" ? "Zurich" : "Australia";
+  return { view, selectedRole, selectedProducts, upgradeFocus, monthlyFocus, month, sourceFamily };
 }
 
 function SourceDetails({ actions, title, url, verifiedAt }: { actions: string[]; title: string; url: string; verifiedAt: string }) {
@@ -90,6 +95,7 @@ function UpgradeCard({ entry }: { entry: ReleaseEntry }) {
         <span className={`priority priority--${entry.priority}`}>{entry.priority}</span>
         <span className="classification">{entry.classification}</span>
         <span className="product-label">{entry.products[0]}</span>
+        <span className="release-path-label">{entry.releaseFrom} → {entry.releaseTo}</span>
       </div>
       <h3>{entry.title}</h3>
       <div className="fact-block"><span>Official fact</span><p>{entry.officialSummary}</p></div>
@@ -157,6 +163,7 @@ export default function App() {
   const [upgradeFocus, setUpgradeFocus] = useState<Focus>(initial.upgradeFocus);
   const [monthlyFocus, setMonthlyFocus] = useState<MonthlyFocus>(initial.monthlyFocus);
   const [month, setMonth] = useState(initial.month);
+  const [sourceFamily, setSourceFamily] = useState<SourceFamily>(initial.sourceFamily);
   const [copyLabel, setCopyLabel] = useState("Copy briefing link");
   const [themeMode, setThemeMode] = useState<ThemeMode>(readInitialTheme);
 
@@ -169,12 +176,18 @@ export default function App() {
       params.set("view", "monthly");
       params.set("month", month);
     }
+    if (view === "upgrade" && sourceFamily === "Zurich") params.set("from", sourceFamily);
     if (selectedRole) params.set("role", selectedRole);
     if (selectedProducts.length) params.set("products", selectedProducts.join(","));
     if (activeFocus !== "all") params.set("focus", activeFocus);
     const query = params.toString();
     window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
-  }, [view, month, selectedRole, selectedProducts, activeFocus]);
+  }, [view, month, sourceFamily, selectedRole, selectedProducts, activeFocus]);
+
+  const applicableUpgradeEntries = useMemo(
+    () => sourceFamily === "Zurich" ? [...australiaEntries, ...brazilEntries] : brazilEntries,
+    [sourceFamily],
+  );
 
   useEffect(() => {
     const systemPreference = window.matchMedia("(prefers-color-scheme: dark)");
@@ -197,7 +210,7 @@ export default function App() {
   }, [themeMode]);
 
   const filteredUpgradeEntries = useMemo(() => {
-    const filtered = upgradeEntries.filter((entry) => {
+    const filtered = applicableUpgradeEntries.filter((entry) => {
       const roleMatches = !selectedRole || entry.roles.includes(selectedRole);
       const productMatches = !selectedProducts.length || entry.products.some((product) => selectedProducts.includes(product));
       const focusMatches = upgradeFocus === "all"
@@ -208,7 +221,7 @@ export default function App() {
       || classRank[a.classification] - classRank[b.classification]
       || a.products[0].localeCompare(b.products[0]));
     return isPersonalized ? filtered : filtered.filter((entry) => ["critical", "high"].includes(entry.priority)).slice(0, 6);
-  }, [selectedRole, selectedProducts, upgradeFocus, isPersonalized]);
+  }, [applicableUpgradeEntries, selectedRole, selectedProducts, upgradeFocus, isPersonalized]);
 
   const filteredMonthlyEntries = useMemo(() => monthlyEntries.filter((entry) => {
     const roleMatches = !selectedRole || entry.roles.includes(selectedRole);
@@ -252,6 +265,7 @@ export default function App() {
     setUpgradeFocus("all");
     setMonthlyFocus("all");
     setMonth(availableMonths[0]);
+    setSourceFamily("Australia");
   }
 
   async function copyLink() {
@@ -287,11 +301,11 @@ export default function App() {
               <button className={!isMonthly ? "active" : ""} onClick={() => setView("upgrade")} aria-pressed={!isMonthly}>Family upgrade</button>
               <button className={isMonthly ? "active" : ""} onClick={() => setView("monthly")} aria-pressed={isMonthly}>Monthly radar <span>New</span></button>
             </div>
-            <p className="kicker">{isMonthly ? `${monthLabel(month)} · Store apps + platform patches` : <>Australia <span>→</span> Brazil · Early Availability</>}</p>
+            <p className="kicker">{isMonthly ? `${monthLabel(month)} · Store apps + platform patches` : <>{sourceFamily} <span>→</span> Brazil · Early Availability</>}</p>
             <h1>{isMonthly ? "Review monthly application and platform changes." : "Build your Brazil upgrade briefing in five minutes."}</h1>
             <p className="hero__lede">{isMonthly ? "Complement official ServiceNow release notes, application version histories, and patch notes with a consolidated, role-aware view for technical review and planning." : "Complement the official release notes with a role- and product-aware view of risks, review decisions, opportunities, and recommended next actions."}</p>
             <div className="trust-row" aria-label="Project principles">
-              <span>{isMonthly ? `${monthlyEntries.filter((entry) => entry.month === month).length} monthly signals` : `${upgradeEntries.length} curated signals`}</span><span>{isMonthly ? "Official sources" : "EA preview"}</span><span>No sign-in</span>
+              <span>{isMonthly ? `${monthlyEntries.filter((entry) => entry.month === month).length} monthly signals` : `${applicableUpgradeEntries.length} curated signals`}</span><span>{isMonthly ? "Official sources" : "EA preview"}</span><span>No sign-in</span>
             </div>
             {!isMonthly && <p className="ea-note"><strong>Early Availability preview:</strong> Brazil content can change before General Availability. Recheck every source before making a production decision.</p>}
             <p className="independence-note">An independent community project. Unofficial and not sponsored, approved, or endorsed by ServiceNow, Inc.</p>
@@ -305,6 +319,9 @@ export default function App() {
             {isMonthly && (
               <fieldset><legend>Release month</legend><label className="select-label" htmlFor="release-month">Archive month</label><select id="release-month" value={month} onChange={(event) => setMonth(event.target.value)}>{availableMonths.map((item) => <option key={item} value={item}>{monthLabel(item)}</option>)}</select></fieldset>
             )}
+            {!isMonthly && (
+              <fieldset><legend>Upgrade path</legend><label className="select-label" htmlFor="source-family">Current family</label><select id="source-family" value={sourceFamily} onChange={(event) => setSourceFamily(event.target.value as SourceFamily)}><option value="Australia">Australia</option><option value="Zurich">Zurich</option></select><p className="field-help">Target: Brazil. Zurich combines both sequential family deltas.</p></fieldset>
+            )}
             <fieldset><legend>Your role</legend><div className="role-grid">{roles.map((role) => <button key={role} className={selectedRole === role ? "choice active" : "choice"} onClick={() => setSelectedRole(selectedRole === role ? "" : role)} aria-pressed={selectedRole === role}>{roleLabels[role]}</button>)}</div></fieldset>
             <fieldset><legend>Products in scope</legend><div className="product-grid">{products.map((product) => <label key={product} className={selectedProducts.includes(product) ? "check-row active" : "check-row"}><input type="checkbox" checked={selectedProducts.includes(product)} onChange={() => toggleProduct(product)} /><span>{product}</span><span className="check-mark" aria-hidden="true">✓</span></label>)}</div></fieldset>
             <fieldset><legend>Focus</legend><div className={`focus-control ${isMonthly ? "focus-control--four" : ""}`}>{focusOptions.map((item) => <button key={item} onClick={() => isMonthly ? setMonthlyFocus(item as MonthlyFocus) : setUpgradeFocus(item as Focus)} className={activeFocus === item ? "active" : ""} aria-pressed={activeFocus === item}>{item}</button>)}</div></fieldset>
@@ -315,7 +332,7 @@ export default function App() {
           <section id="briefing-results" className="results" aria-live="polite">
             <div className="results__header">
               <div><p className="eyebrow">{isMonthly ? `${monthLabel(month)} radar` : isPersonalized ? "Your EA briefing" : "Sample EA briefing"}</p><h2>{isMonthly ? `${filteredMonthlyEntries.length} monthly ${filteredMonthlyEntries.length === 1 ? "signal" : "signals"} for your context` : isPersonalized ? `${filteredUpgradeEntries.length} signals for your upgrade` : "Start with the signals most teams should see"}</h2><p>{isMonthly ? "Monthly priorities are editorial guidance. Store apps may have separate family, subscription, and dependency requirements." : isPersonalized ? "Brazil is in Early Availability. Priorities are editorial guidance, not official ServiceNow severity ratings." : "Choose a role or product to replace this preview with a focused briefing. Brazil content may change before General Availability."}</p></div>
-              {isMonthly ? <div className="release-stamp release-stamp--month"><span>RADAR</span><strong>{monthLabel(month).split(" ")[0]}</strong><i>{month.slice(0, 4)}</i><span>SOURCES</span><strong>Store + patch</strong></div> : <div className="release-stamp"><span>FROM</span><strong>Australia</strong><i>→</i><span>TO · EA</span><strong>Brazil</strong></div>}
+              {isMonthly ? <div className="release-stamp release-stamp--month"><span>RADAR</span><strong>{monthLabel(month).split(" ")[0]}</strong><i>{month.slice(0, 4)}</i><span>SOURCES</span><strong>Store + patch</strong></div> : <div className="release-stamp"><span>FROM</span><strong>{sourceFamily}</strong><i>→</i><span>TO · EA</span><strong>Brazil</strong></div>}
             </div>
 
             {currentEntries.length > 0 && <ImpactRadar entries={currentEntries} />}
@@ -339,7 +356,7 @@ export default function App() {
         </div>
 
         <section id="methodology" className="methodology">
-          <div className="methodology__intro"><p className="eyebrow">How to trust this</p><h2>Official facts. Clearly labeled judgment.</h2><p>Upgrade signals come from family release notes. Monthly signals come from public ServiceNow Store application version histories and patch availability pages. Every item links to its source and records when it was checked.</p></div>
+          <div className="methodology__intro"><p className="eyebrow">How to trust this</p><h2>Official facts. Clearly labeled judgment.</h2><p>Upgrade signals come from family release notes. A Zurich-to-Brazil view combines the documented Zurich-to-Australia and Australia-to-Brazil deltas. Monthly signals come from public ServiceNow Store application version histories and patch availability pages. Every item links to its source and records when it was checked.</p></div>
           <div className="method-grid"><article><span>01</span><h3>Select</h3><p>We prioritize migration work, behavior changes, regression fixes, and capabilities with a practical adoption decision.</p></article><article><span>02</span><h3>Verify</h3><p>Facts are checked against public ServiceNow documentation. Security details requiring Now Support access are never reconstructed.</p></article><article><span>03</span><h3>Interpret</h3><p>Implications and actions are separate editorial guidance—not ServiceNow severity, compatibility approval, or advice.</p></article><article><span>04</span><h3>Correct</h3><p>Corrections and proposed entries are welcome through the public GitHub issue templates.</p></article></div>
           <div className="update-note"><strong>Last content review</strong><span>29 September 2026</span><span>Brazil Early Availability briefing</span><span>ServiceNowDocs Brazil branch at 754d2a8</span></div>
         </section>

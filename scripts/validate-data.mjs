@@ -3,8 +3,15 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const file = path.join(root, "src/data/releaseEntries.json");
-const entries = JSON.parse(fs.readFileSync(file, "utf8"));
+const familyDatasets = [
+  { label: "Zurich to Australia", from: "Zurich", to: "Australia", file: "releaseEntriesAustralia.json" },
+  { label: "Australia to Brazil", from: "Australia", to: "Brazil", file: "releaseEntriesBrazil.json" },
+].map((dataset) => ({
+  ...dataset,
+  entries: JSON.parse(fs.readFileSync(path.join(root, `src/data/${dataset.file}`), "utf8")),
+}));
+const entries = familyDatasets.flatMap((dataset) => dataset.entries);
+const routeByEntry = new Map(familyDatasets.flatMap((dataset) => dataset.entries.map((entry) => [entry, dataset])));
 const monthlyFile = path.join(root, "src/data/monthlyReleaseEntries.json");
 const monthlyEntries = JSON.parse(fs.readFileSync(monthlyFile, "utf8"));
 
@@ -19,8 +26,10 @@ const allowed = {
 const errors = [];
 const ids = new Set();
 
-if (!Array.isArray(entries) || entries.length < 20 || entries.length > 30) {
-  errors.push("Dataset must contain between 20 and 30 entries.");
+for (const dataset of familyDatasets) {
+  if (!Array.isArray(dataset.entries) || dataset.entries.length < 20 || dataset.entries.length > 30) {
+    errors.push(`${dataset.label} dataset must contain between 20 and 30 entries.`);
+  }
 }
 
 for (const [index, entry] of entries.entries()) {
@@ -31,7 +40,8 @@ for (const [index, entry] of entries.entries()) {
   if (ids.has(entry.id)) errors.push(`${at}: duplicate id.`);
   ids.add(entry.id);
   if (!/^[a-z0-9-]+$/.test(entry.id ?? "")) errors.push(`${at}: id must be lowercase kebab-case.`);
-  if (entry.releaseFrom !== "Australia" || entry.releaseTo !== "Brazil") errors.push(`${at}: unsupported release path.`);
+  const route = routeByEntry.get(entry);
+  if (entry.releaseFrom !== route.from || entry.releaseTo !== route.to) errors.push(`${at}: unsupported release path.`);
   if (!Array.isArray(entry.products) || !entry.products.length || entry.products.some((value) => !allowed.products.has(value))) errors.push(`${at}: invalid products.`);
   if (!Array.isArray(entry.roles) || !entry.roles.length || entry.roles.some((value) => !allowed.roles.has(value))) errors.push(`${at}: invalid roles.`);
   if (!allowed.classifications.has(entry.classification)) errors.push(`${at}: invalid classification.`);
@@ -90,4 +100,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Validated ${entries.length} upgrade entries and ${monthlyEntries.length} monthly entries.`);
+console.log(`Validated ${entries.length} upgrade entries across ${familyDatasets.length} release paths and ${monthlyEntries.length} monthly entries.`);

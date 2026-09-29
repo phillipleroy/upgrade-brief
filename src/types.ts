@@ -14,12 +14,13 @@ export type ViewMode = "upgrade" | "monthly";
 export type MonthlyFocus = "all" | "actions" | "new" | "fixes";
 export type MonthlyChangeType = (typeof monthlyChangeTypes)[number];
 export type ReleaseKind = (typeof releaseKinds)[number];
+export type SourceFamily = "Zurich" | "Australia";
 
 export interface ReleaseEntry {
   id: string;
   title: string;
-  releaseFrom: "Australia";
-  releaseTo: "Brazil";
+  releaseFrom: SourceFamily;
+  releaseTo: "Australia" | "Brazil";
   products: Product[];
   roles: Role[];
   classification: Classification;

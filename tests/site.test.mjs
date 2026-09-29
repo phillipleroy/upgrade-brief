@@ -4,6 +4,9 @@ import test from "node:test";
 
 const html = fs.readFileSync(new URL("../dist/index.html", import.meta.url), "utf8");
 const monthlyEntries = JSON.parse(fs.readFileSync(new URL("../src/data/monthlyReleaseEntries.json", import.meta.url), "utf8"));
+const australiaEntries = JSON.parse(fs.readFileSync(new URL("../src/data/releaseEntriesAustralia.json", import.meta.url), "utf8"));
+const brazilEntries = JSON.parse(fs.readFileSync(new URL("../src/data/releaseEntriesBrazil.json", import.meta.url), "utf8"));
+const appSource = fs.readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8");
 const radarSource = fs.readFileSync(new URL("../src/ImpactRadar.tsx", import.meta.url), "utf8");
 
 test("production output contains product metadata", () => {
@@ -24,6 +27,16 @@ test("impact radar provides interactive and accessible source-backed markers", (
   assert.match(radarSource, /role="img"/);
   assert.match(radarSource, /href={`#entry-\${entry\.id}`}/);
   assert.match(radarSource, /Priorities shown here are editorial guidance/);
+});
+
+test("family selector supports cumulative Zurich-to-Brazil briefings", () => {
+  assert.equal(australiaEntries.length, 30);
+  assert.equal(brazilEntries.length, 24);
+  assert.ok(australiaEntries.every((entry) => entry.releaseFrom === "Zurich" && entry.releaseTo === "Australia"));
+  assert.ok(brazilEntries.every((entry) => entry.releaseFrom === "Australia" && entry.releaseTo === "Brazil"));
+  assert.match(appSource, /id="source-family"/);
+  assert.match(appSource, /params\.get\("from"\)/);
+  assert.match(appSource, /\[\.\.\.australiaEntries, \.\.\.brazilEntries\]/);
 });
 
 test("monthly archive contains a balanced, source-backed July launch edition", () => {
