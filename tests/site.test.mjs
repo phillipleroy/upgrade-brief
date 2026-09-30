@@ -26,6 +26,9 @@ test("impact radar provides interactive and accessible source-backed markers", (
   assert.match(radarSource, /Impact radar/);
   assert.match(radarSource, /role="img"/);
   assert.match(radarSource, /href={`#entry-\${entry\.id}`}/);
+  assert.match(radarSource, /How to read this radar/);
+  assert.match(radarSource, /aria-live="polite" aria-atomic="true"/);
+  assert.match(radarSource, /Open the full briefing card/);
   assert.match(radarSource, /Priorities shown here are editorial guidance/);
 });
 

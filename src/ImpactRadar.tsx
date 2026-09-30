@@ -109,13 +109,11 @@ export function ImpactRadar({ entries }: { entries: RadarEntry[] }) {
           {points.map(({ entry, group, kind, x, y }) => (
             <a
               key={entry.id}
-              className={`radar-marker radar-marker--${group}`}
+              className={`radar-marker radar-marker--${group}${activeId === entry.id ? " radar-marker--active" : ""}`}
               href={`#entry-${entry.id}`}
               aria-label={`${entry.title}. ${entry.products[0]}. ${entry.priority} editorial priority. ${kind}.`}
               onMouseEnter={() => setActiveId(entry.id)}
-              onMouseLeave={() => setActiveId(null)}
               onFocus={() => setActiveId(entry.id)}
-              onBlur={() => setActiveId(null)}
             >
               <title>{entry.title}</title>
               <MarkerShape group={group} x={x} y={y} />
@@ -130,17 +128,39 @@ export function ImpactRadar({ entries }: { entries: RadarEntry[] }) {
       <div className="impact-radar__copy">
         <p className="eyebrow">Visual overview</p>
         <h2 id="impact-radar-title">Impact radar</h2>
-        <p>See where attention is concentrated across {productCount} {productCount === 1 ? "product" : "products"}. Critical items sit closest to the center.</p>
-        <div className="radar-priority-scale" aria-label="Editorial priority rings">
-          <strong>Critical</strong><span>High</span><span>Medium</span><span>Informational</span>
+        <div className="radar-guide" aria-label="How to read the impact radar">
+          <div className="radar-guide__heading">
+            <span aria-hidden="true">?</span>
+            <div><strong>How to read this radar</strong><p>Each point is one briefing signal. Its position and shape explain why it matters.</p></div>
+          </div>
+          <ol>
+            <li><span>01</span><div><strong>Sector = product</strong><p>Signals are grouped across {productCount} {productCount === 1 ? "product area" : "product areas"}.</p></div></li>
+            <li><span>02</span><div><strong>Distance = priority</strong><p>Items nearer the center deserve earlier review.</p></div></li>
+            <li><span>03</span><div><strong>Shape = signal type</strong><p>Triangles flag attention, squares mark changes, and circles show value.</p></div></li>
+          </ol>
         </div>
-        <div className="radar-legend" aria-label="Marker legend">
-          <span><i className="legend-shape legend-shape--attention" aria-hidden="true" />Risk / deprecation / removed</span>
-          <span><i className="legend-shape legend-shape--review" aria-hidden="true" />Change / patch</span>
-          <span><i className="legend-shape legend-shape--value" aria-hidden="true" />Opportunity / new / fix</span>
+        <div className="radar-key">
+          <div className="radar-priority-scale" aria-label="Editorial priority rings">
+            <strong>Critical</strong><span>High</span><span>Medium</span><span>Informational</span>
+          </div>
+          <div className="radar-legend" aria-label="Marker legend">
+            <span><i className="legend-shape legend-shape--attention" aria-hidden="true" />Attention</span>
+            <span><i className="legend-shape legend-shape--review" aria-hidden="true" />Change</span>
+            <span><i className="legend-shape legend-shape--value" aria-hidden="true" />Value</span>
+          </div>
         </div>
-        <div className="radar-detail" aria-live="polite">
-          {activePoint ? <><strong>{activePoint.entry.title}</strong><span>{activePoint.entry.products[0]} · {activePoint.entry.priority} · {activePoint.kind} · verified {activePoint.entry.source.verifiedAt}</span></> : <><strong>Explore a signal</strong><span>Hover or focus a marker; select it to open the corresponding briefing card.</span></>}
+        <div className={`radar-detail${activePoint ? ` radar-detail--${activePoint.group}` : ""}`} aria-live="polite" aria-atomic="true">
+          {activePoint ? <>
+            <div className="radar-detail__status"><span>Signal selected</span><i aria-hidden="true">Live</i></div>
+            <strong>{activePoint.entry.title}</strong>
+            <div className="radar-detail__meta"><span>{activePoint.entry.products[0]}</span><span>{activePoint.entry.priority} priority</span><span>{activePoint.kind}</span></div>
+            <p>{activePoint.entry.officialSummary}</p>
+            <a href={`#entry-${activePoint.entry.id}`}>Open the full briefing card <span aria-hidden="true">→</span></a>
+          </> : <>
+            <div className="radar-detail__status"><span>Interactive detail</span></div>
+            <strong>Explore a signal</strong>
+            <p>Hover over a point—or focus it with your keyboard—to preview the update here. Select the point to jump to its complete briefing card.</p>
+          </>}
         </div>
         <p className="radar-disclaimer">Priorities shown here are editorial guidance, not official ServiceNow severity ratings.</p>
       </div>
