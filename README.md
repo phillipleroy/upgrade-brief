@@ -5,7 +5,7 @@ An unofficial, source-backed briefing tool with two views:
 - **Family Upgrade Brief:** helps teams moving from Australia or Zurich to Brazil find prioritized risks, changes, opportunities, and next actions.
 - **Monthly Release Radar:** consolidates monthly ServiceNow Store application updates and platform patches into a role- and product-aware review.
 
-Visitors can share filtered URLs, print or save a briefing as PDF, and open the exact official source behind every finding. The first monthly archive covers July 2026.
+Visitors can share filtered URLs, print or save a briefing as PDF, and open the exact official source behind every finding. The monthly archive covers July through September 2026 and derives its month selector directly from the curated dataset.
 
 The Brazil briefing is an **Early Availability preview**. Content may change before General Availability, so the interface labels the release status and asks readers to recheck current official documentation before production decisions. Users can select Australia or Zurich as their current family. The Zurich view combines the sequential Zurich-to-Australia and Australia-to-Brazil documentation deltas; it does not pretend that a direct Zurich-to-Brazil source exists. The current Brazil dataset was verified on 29 September 2026 against the Brazil branch of ServiceNowDocs at commit `754d2a8d66adca6e93d01e9c7b8f12d56f833283`.
 
@@ -66,7 +66,7 @@ Monthly signals live in `src/data/monthlyReleaseEntries.json`. They additionally
 - A monthly change type: `new`, `changed`, `fixed`, `removed`, or `patch`
 - Explicit family compatibility taken from the official notes
 
-Monthly Store entries come from public ServiceNow application version histories. Platform patch entries come from the public available-patches-and-hotfixes page. Some security and hotfix details require Now Support access; do not infer or reproduce details that are not publicly documented.
+Monthly Store entries come from public ServiceNow application version histories and dated application release notes in the ServiceNowDocs repository. Platform patch entries come from the public available-patches-and-hotfixes page. Some security and hotfix details require Now Support access; do not infer or reproduce details that are not publicly documented.
 
 Run `npm run validate:data` after editing. The validator checks both datasets and rejects duplicate IDs, unsupported values, non-ServiceNow source URLs, invalid dates, missing actions, and incomplete product coverage.
 

@@ -39,13 +39,15 @@ test("family selector supports cumulative Zurich-to-Brazil briefings", () => {
   assert.match(appSource, /\[\.\.\.australiaEntries, \.\.\.brazilEntries\]/);
 });
 
-test("monthly archive contains a balanced, source-backed July launch edition", () => {
-  assert.equal(monthlyEntries.length, 15);
-  assert.deepEqual(new Set(monthlyEntries.map((entry) => entry.month)), new Set(["2026-07"]));
-  assert.deepEqual(
-    new Set(monthlyEntries.flatMap((entry) => entry.products)),
-    new Set(["Platform", "Creator & Development", "ITSM", "CMDB & ITOM", "Next Experience", "SPM"]),
-  );
+test("monthly archive contains balanced, source-backed July through September editions", () => {
+  const expectedProducts = new Set(["Platform", "Creator & Development", "ITSM", "CMDB & ITOM", "Next Experience", "SPM"]);
+  assert.equal(monthlyEntries.length, 38);
+  assert.deepEqual(new Set(monthlyEntries.map((entry) => entry.month)), new Set(["2026-07", "2026-08", "2026-09"]));
+  for (const month of ["2026-07", "2026-08", "2026-09"]) {
+    const entries = monthlyEntries.filter((entry) => entry.month === month);
+    assert.ok(entries.length >= 10);
+    assert.deepEqual(new Set(entries.flatMap((entry) => entry.products)), expectedProducts);
+  }
   assert.ok(monthlyEntries.some((entry) => entry.releaseKind === "platform-patch"));
   assert.ok(monthlyEntries.some((entry) => entry.releaseKind === "store-application"));
   assert.ok(monthlyEntries.every((entry) => new URL(entry.source.url).hostname.endsWith("servicenow.com")));

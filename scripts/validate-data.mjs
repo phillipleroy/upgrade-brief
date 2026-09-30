@@ -91,8 +91,17 @@ for (const [index, entry] of monthlyEntries.entries()) {
   if (entry.officialSummary === entry.editorialImplication) errors.push(`${at}: official fact and editorial interpretation must be distinct.`);
 }
 
-for (const product of allowed.products) {
-  if (!monthlyEntries.some((entry) => entry.products.includes(product))) errors.push(`Missing monthly coverage for ${product}.`);
+const monthlyEntriesByMonth = monthlyEntries.reduce((groups, entry) => {
+  const group = groups.get(entry.month) ?? [];
+  group.push(entry);
+  groups.set(entry.month, group);
+  return groups;
+}, new Map());
+for (const [month, monthEntries] of monthlyEntriesByMonth) {
+  if (monthEntries.length < 10) errors.push(`${month}: monthly archive must contain at least 10 entries.`);
+  for (const product of allowed.products) {
+    if (!monthEntries.some((entry) => entry.products.includes(product))) errors.push(`${month}: missing monthly coverage for ${product}.`);
+  }
 }
 
 if (errors.length) {

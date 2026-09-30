@@ -78,7 +78,7 @@ button { color: inherit; }
 
 .hero { padding: clamp(64px, 9vw, 128px) clamp(20px, 7vw, 112px) clamp(56px, 8vw, 100px); display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, .6fr); gap: clamp(40px, 8vw, 120px); align-items: end; position: relative; overflow: hidden; }
 .hero::before { content: "BRA"; position: absolute; right: -4vw; top: -2.5vw; font-size: clamp(150px, 29vw, 440px); font-weight: 800; line-height: .9; letter-spacing: -.1em; color: var(--watermark); pointer-events: none; }
-.hero--monthly::before { content: "JUL"; }
+.hero--monthly::before { content: attr(data-month-code); }
 .view-switcher { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 30px; border: 1px solid var(--line); border-radius: 9px; background: var(--soft-surface); position: relative; z-index: 1; }
 .view-switcher button { border: 0; border-radius: 6px; padding: 9px 13px; background: transparent; cursor: pointer; font-size: 12px; font-weight: 800; }
 .view-switcher button.active { background: var(--strong-bg); color: var(--strong-text); box-shadow: 0 3px 10px rgba(0,0,0,.15); }

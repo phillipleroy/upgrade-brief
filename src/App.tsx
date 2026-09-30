@@ -107,6 +107,7 @@ function UpgradeCard({ entry }: { entry: ReleaseEntry }) {
 
 function MonthlyCard({ entry }: { entry: MonthlyReleaseEntry }) {
   const kindLabel = entry.releaseKind === "platform-patch" ? "Platform patch" : "Store app";
+  const versionLabel = entry.releaseKind === "platform-patch" || !/^\d/.test(entry.version) ? entry.version : `v${entry.version}`;
   return (
     <article id={`entry-${entry.id}`} className={`entry-card entry-card--monthly-${entry.changeType}`} data-testid={`entry-${entry.id}`}>
       <div className="entry-card__topline">
@@ -114,7 +115,7 @@ function MonthlyCard({ entry }: { entry: MonthlyReleaseEntry }) {
         <span className="classification">{entry.changeType}</span>
         <span className="product-label">{entry.products[0]}</span>
       </div>
-      <p className="version-line"><span>{kindLabel}</span> · {entry.application} · {entry.releaseKind === "platform-patch" ? entry.version : `v${entry.version}`}</p>
+      <p className="version-line"><span>{kindLabel}</span> · {entry.application} · {versionLabel}</p>
       <h3>{entry.title}</h3>
       <div className="fact-block"><span>Official fact</span><p>{entry.officialSummary}</p></div>
       <div className="editorial-block"><span>Our interpretation</span><p>{entry.editorialImplication}</p></div>
@@ -304,7 +305,7 @@ export default function App() {
       </header>
 
       <main id="top">
-        <section className={`hero ${isMonthly ? "hero--monthly" : ""}`}>
+        <section className={`hero ${isMonthly ? "hero--monthly" : ""}`} data-month-code={isMonthly ? monthlyName.slice(0, 3).toUpperCase() : undefined}>
           <div className="hero__copy">
             <div className="view-switcher" aria-label="Briefing type">
               <button className={!isMonthly ? "active" : ""} onClick={() => setView("upgrade")} aria-pressed={!isMonthly}>Family upgrade</button>
@@ -390,13 +391,13 @@ export default function App() {
         </div>
 
         <section id="methodology" className="methodology">
-          <div className="methodology__intro"><p className="eyebrow">How to trust this</p><h2>Official facts. Clearly labeled judgment.</h2><p>Upgrade signals come from family release notes. A Zurich-to-Brazil view combines the documented Zurich-to-Australia and Australia-to-Brazil deltas. Monthly signals come from public ServiceNow Store application version histories and patch availability pages. Every item links to its source and records when it was checked.</p></div>
+          <div className="methodology__intro"><p className="eyebrow">How to trust this</p><h2>Official facts. Clearly labeled judgment.</h2><p>Upgrade signals come from family release notes. A Zurich-to-Brazil view combines the documented Zurich-to-Australia and Australia-to-Brazil deltas. Monthly signals come from public ServiceNow Store version histories, dated application release notes, and patch availability pages. Every item links to its source and records when it was checked.</p></div>
           <div className="method-grid"><article><span>01</span><h3>Select</h3><p>We prioritize migration work, behavior changes, regression fixes, and capabilities with a practical adoption decision.</p></article><article><span>02</span><h3>Verify</h3><p>Facts are checked against public ServiceNow documentation. Security details requiring Now Support access are never reconstructed.</p></article><article><span>03</span><h3>Interpret</h3><p>Implications and actions are separate editorial guidance—not ServiceNow severity, compatibility approval, or advice.</p></article><article><span>04</span><h3>Correct</h3><p>Corrections and proposed entries are welcome through the public GitHub issue templates.</p></article></div>
-          <div className="update-note"><strong>Last content review</strong><span>29 September 2026</span><span>Brazil Early Availability briefing</span><span>ServiceNowDocs Brazil branch at 754d2a8</span></div>
+          <div className="update-note"><strong>Last content review</strong><span>30 September 2026</span><span>Brazil EA + July–September monthly radar</span><span>ServiceNowDocs Brazil branch at 754d2a8</span></div>
         </section>
       </main>
 
-      <footer><div className="footer__line"><p><strong>Upgrade Brief</strong> · An independent community project.</p><p>Not an official ServiceNow product and not sponsored, approved, or endorsed by ServiceNow, Inc. Views, priorities, and recommendations are the author’s own.</p></div><div className="ai-note"><span>AI transparency</span><p>This project was created with AI assistance. Release information was summarized and structured from the linked official ServiceNow sources, then reviewed for accuracy as of 29 September 2026. Brazil is in Early Availability, so its documentation can change before General Availability. AI-generated content can contain errors or become outdated. Confirm all findings in current ServiceNow documentation and validate recommendations in your own non-production instance before making upgrade decisions. Priorities and actions shown here are editorial guidance, not official ServiceNow severity ratings.</p></div><div className="trademark-note"><span>Trademarks</span><p>ServiceNow, the ServiceNow logo, Now, and other ServiceNow marks are trademarks and/or registered trademarks of ServiceNow, Inc., in the United States and/or other countries. Other company and product names may be trademarks of the respective companies with which they are associated.</p></div></footer>
+      <footer><div className="footer__line"><p><strong>Upgrade Brief</strong> · An independent community project.</p><p>Not an official ServiceNow product and not sponsored, approved, or endorsed by ServiceNow, Inc. Views, priorities, and recommendations are the author’s own.</p></div><div className="ai-note"><span>AI transparency</span><p>This project was created with AI assistance. Release information was summarized and structured from the linked official ServiceNow sources, then reviewed for accuracy as of 30 September 2026. Brazil is in Early Availability, so its documentation can change before General Availability. AI-generated content can contain errors or become outdated. Confirm all findings in current ServiceNow documentation and validate recommendations in your own non-production instance before making upgrade decisions. Priorities and actions shown here are editorial guidance, not official ServiceNow severity ratings.</p></div><div className="trademark-note"><span>Trademarks</span><p>ServiceNow, the ServiceNow logo, Now, and other ServiceNow marks are trademarks and/or registered trademarks of ServiceNow, Inc., in the United States and/or other countries. Other company and product names may be trademarks of the respective companies with which they are associated.</p></div></footer>
     </>
   );
 }
